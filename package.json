@@ -1,0 +1,24 @@
+{
+  "name": "btc-poolwatch",
+  "version": "0.1.0",
+  "description": "Watch the mempool of Bitcoin transactions",
+  "keywords": [
+    "p2p",
+    "network",
+    "bitcoin",
+    "peers",
+    "cryptography"
+  ],
+  "main": "./app.js",
+  "dependencies": {
+    "binstring": "0.2.x",
+    "btc-p2p": "0.2.x",
+    "leveldown": "0.10.x",
+    "async": "0.2.x"
+  },
+  "repository": {
+    "url": "https://github.com/MidnightLightning/btc-poolwatch",
+    "type": "git"
+  },
+  "author": "Brooks Boyd <boydb@midnightdesign.ws>"
+}
