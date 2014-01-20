@@ -21,7 +21,10 @@ async.waterfall([
     db = new Storage(dataDir+'/mempool.db', cb);
   }],
   function(err, rs) {
-    console.log(err, rs);
+    if (err) {
+      console.log(err);
+      process.exit(0);
+    }
   }
 );
 
@@ -44,7 +47,8 @@ n.on('error', function(d) {
 });
 
 n.on('peerStatus', function(d) {
-  console.log('status:', d);
+  //console.log('status:', d);
+  console.log('Connected to '+d.numActive+' peers');
 });
 
 n.on('verackMessage', function verackReceived(d) {
@@ -54,7 +58,6 @@ n.on('verackMessage', function verackReceived(d) {
 
 // Every time a transaction is received, note its timestamp
 n.on('transactionInv', function transactionInv(d) {
-  console.log('Peer '+d.peer.getUUID()+' knows of Transaction '+d.hash.toString('hex'));
   var key = Buffer.concat([
     Buffer(d.peer.getUUID(), 'utf8'),
     Buffer('~', 'utf8'),
@@ -62,7 +65,14 @@ n.on('transactionInv', function transactionInv(d) {
   ]);
   var value = binstring(parseInt(new Date().getTime()/1000), {in:'number', out:'buffer'});
   db.putOrIgnore(key, value, function(err, rs) {
-    console.log('db insert:', err, rs);
+    if (err) {
+      console.log(err);
+      process.emit('SIGINT');
+      return;
+    }
+    if (rs == 'Inserted value') {
+      console.log('Peer '+d.peer.getUUID()+' knows of Transaction '+d.hash.toString('hex'));
+    }
   });
 });
 
