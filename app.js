@@ -59,9 +59,9 @@ n.on('verackMessage', function verackReceived(d) {
 // Every time a transaction is received, note its timestamp
 n.on('transactionInv', function transactionInv(d) {
   var key = Buffer.concat([
-    Buffer(d.peer.getUUID(), 'utf8'),
+    d.hash,
     Buffer('~', 'utf8'),
-    d.hash
+    Buffer(d.peer.getUUID(), 'utf8'),
   ]);
   var value = binstring(parseInt(new Date().getTime()/1000), {in:'number', out:'buffer'});
   db.putOrIgnore(key, value, function(err, rs) {

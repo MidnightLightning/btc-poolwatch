@@ -54,11 +54,11 @@ function doLoop(iterator, count, callback) {
       return;
     }
     
-    // key = host~port~[hash]
+    // key = [hash]~host~port
     var tmp = key.toString('utf8').split('~');
-    var host = tmp[0];
-    var port = tmp[1];
-    var hash = key.slice(host.length+port.length+2).toString('hex');
+    var port = tmp.pop();
+    var host = tmp.pop();
+    var hash = key.slice(0, key.length-(host.length+port.length+2)).toString('hex');
     var timestamp = value.readUInt32BE(0);
     
     if (!peers[host+'~'+port]) {
